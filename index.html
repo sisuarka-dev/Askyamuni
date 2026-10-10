@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><meta name="description" content="Aksya Mundi: where the mountain meets the ocean."><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231a1247'/%3E%3Cpath d='M5 24 13 10l5 8 3-4 6 10z' fill='%23ffd08a'/%3E%3C/svg%3E"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><script>/* phone browsers fire resize every time the address bar slides in or out; ignore those height-only blips so the scroll trackers and renderers are not rebuilt mid-scroll */(function(){try{if(!matchMedia("(pointer:coarse)").matches)return;var w=innerWidth,h=innerHeight;addEventListener("resize",function(e){var nw=innerWidth,nh=innerHeight;if(nw===w&&Math.abs(nh-h)<=Math.max(160,h*.22)){e.stopImmediatePropagation();return}w=nw;h=nh},true)}catch(e){}})()</script><meta name="description" content="Aksya Mundi: where the mountain meets the ocean."><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231a1247'/%3E%3Cpath d='M5 24 13 10l5 8 3-4 6 10z' fill='%23ffd08a'/%3E%3C/svg%3E"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Aksya Mundi Descent</title>
 <link rel="preload" href="dm-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"DM Sans";font-style:normal;font-weight:100 1000;font-display:swap;src:url(dm-sans-latin-wght-normal.woff2) format("woff2")}
@@ -389,6 +389,11 @@ html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!
 @media (pointer:coarse),(max-width:760px){.grain{display:none!important}.scene{transition:none}.flap,.tsw,.star,.sway{animation:none!important}}
 .scene.zz>.art,.scene.zz>.layer,.scene.zz>.cpin{visibility:hidden}
 .scene.zz *,.scene.zz *::before,.scene.zz *::after{animation-play-state:paused!important}
+/* hold the flat cell back until the 3D one is ready (or has clearly failed), so first load never flashes the placeholder */
+body:not(.h3):not(.nogl) .cabin{visibility:hidden!important}
+/* when a phone's address bar slides away the page grows taller than the small-viewport height the scenes use; paint that gap in the HUD colour instead of letting the page background show */
+#pin,.cpin{box-shadow:0 90px 0 0 #08183c}
+@media (pointer:coarse),(max-width:760px){.hud{background:linear-gradient(rgba(8,24,60,0),rgba(8,24,60,.8) 36%,rgba(8,24,60,.94))}}
 </style>
 
 <header class="nav" id="top">
@@ -2174,7 +2179,7 @@ function draw(y){
     cabin.style.opacity=p>.86?Math.max(0,1-(p-.86)/.1):1;
     cabin.style.visibility=p>=.97?'hidden':'visible';
     sky.style.transform='translate('+(TX*e).toFixed(1)+'px,'+(TY*e).toFixed(1)+'px) scale('+(.78+.22*e).toFixed(4)+')';
-    const o=Math.max(0,1-p*3.2);
+    const o=Math.max(0,1-p*(innerWidth<760?9:3.2));
     hero.style.opacity=o;shade.style.opacity=o;hero.style.setProperty('--lift',(-p*110).toFixed(1)+'px');hero.style.pointerEvents=o<.2?'none':'auto';
     hint.style.opacity=Math.max(0,1-p*6);HERO.p=p;HERO.over=Math.max(0,(y-w.top-span)/vh);VEIL(p);
   }
@@ -2451,7 +2456,7 @@ const climbLive=(function(){
     cx.fillStyle='#fff';
     for(let i=0;i<snow.length;i++){const f=snow[i];if(i/snow.length>amt)continue;f.x-=(40+f.r*14)*dt*(1+Math.sin(T*.4)*.4);f.y+=f.v*dt;f.x+=Math.sin(T*1.3+f.ph)*10*dt;if(f.y>H+4){f.y=-4;f.x=Math.random()*W*1.2}if(f.x<-6)f.x=W+4;cx.globalAlpha=.85;cx.beginPath();cx.arc(f.x,f.y,f.r,0,6.283);cx.fill()}
     for(let i=chips.length-1;i>=0;i--){const c=chips[i];c.l+=dt;if(c.l>c.L){chips.splice(i,1);continue}c.vy+=520*dt;c.x+=c.vx*dt;c.y+=c.vy*dt;cx.globalAlpha=1-c.l/c.L;cx.fillStyle=(i%3)?'#eaf3ff':'#9fc0f0';cx.beginPath();cx.arc(c.x,c.y,c.r,0,6.283);cx.fill()}
-    for(let i=rings.length-1;i>=0;i--){const r=rings[i];r.l+=dt;if(r.l>.45){rings.splice(i,1);continue}cx.globalAlpha=(1-r.l/.45)*.8;cx.strokeStyle='#fff';cx.lineWidth=2;cx.beginPath();cx.arc(r.x,r.y,8+r.l*90*g.s,0,6.283);cx.stroke()}
+    for(let i=rings.length-1;i>=0;i--){const r=rings[i];r.l+=dt;if(r.l>.45){rings.splice(i,1);continue}cx.globalAlpha=(1-r.l/.45)*.8;cx.strokeStyle='#fff';cx.lineWidth=2;cx.beginPath();cx.arc(r.x,r.y,Math.max(0,8+r.l*90*g.s),0,6.283);cx.stroke()}
     if(ps<PI0*.8&&T-lastRB>1.05){lastRB=T;spawnBreath(rbN++%3===2)}
     if(ps<PM&&Math.sin(T*1.5)>.995&&Math.random()<.5)spawnBreath(false);
     {const nn=Math.floor(YMAX*Math.min(1,ps/PM)/STEP),ff=YMAX*Math.min(1,ps/PM)/STEP-nn;if(ps<PM&&ff>.62&&ff<.7&&nn!==breathT){breathT=nn;spawnBreath(false)}}
@@ -3084,7 +3089,7 @@ function flyUpdate(t){
 /* ================= hero: a 3D cell. A small soul, a looming painted father, one barred window ================= */
 const HERO={p:0};
 const heroLive=(function(){
-  if(!window.THREE)return function(){};
+  if(!window.THREE){document.body.classList.add('nogl');return function(){}}
   const T=THREE,pinEl=document.getElementById('pin');
   let hooked=0,R=null,SC,CAM,ready=false,fail=false,t0=-1,lastRender=0;
   const ptr={x:0,y:0,sx:0,sy:0};
@@ -3260,7 +3265,7 @@ const heroLive=(function(){
   function teardown(){try{SC.traverse(function(o){if(o.geometry)o.geometry.dispose();if(o.material){[].concat(o.material).forEach(function(m){if(m.map)m.map.dispose();if(m.emissiveMap)m.emissiveMap.dispose();m.dispose()})}});R.dispose();R.forceContextLoss();R.domElement.remove()}catch(e){}
     ready=false;t0=-1;rendered=false;document.body.classList.remove('h3')}
   function init(){
-    try{R=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});}catch(e){fail=true;return}
+    try{R=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});}catch(e){fail=true;document.body.classList.add('nogl');return}
     R.setPixelRatio(Math.min(devicePixelRatio||1,innerWidth<760?1.5:1.75));R.shadowMap.enabled=true;R.shadowMap.type=T.PCFSoftShadowMap;R.toneMapping=T.ACESFilmicToneMapping;R.toneMappingExposure=1.25;R.setClearColor(0x000000,0);
     const c=R.domElement;c.className='h3d';c.setAttribute('aria-hidden','true');pinEl.insertBefore(c,pinEl.firstChild.nextSibling);
     build();size();if(!hooked){hooked=1;addEventListener('resize',function(){if(ready)size()});addEventListener('pointermove',function(e){ptr.x=e.clientX/innerWidth*2-1;ptr.y=e.clientY/innerHeight*2-1},{passive:true})}
@@ -3385,4 +3390,4 @@ window.addEventListener('load',measure);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
 })();
 </script><script>(function(){try{var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle('zz',!e.isIntersecting)})},{rootMargin:'100% 0px 100% 0px'});document.querySelectorAll('section.scene').forEach(function(s){io.observe(s)})}catch(e){}})();</script>
-</body></html>
+<script>setTimeout(function(){if(!document.body.classList.contains('h3'))document.body.classList.add('nogl')},6000)</script></body></html>
